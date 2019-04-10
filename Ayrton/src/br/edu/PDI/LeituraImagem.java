@@ -11,7 +11,7 @@ public class LeituraImagem {
 	public void jButton1ActionPerformed() {
 		BufferedImage image;
 
-		String str = "D:\\Ayrton\\Trabalhos\\PDI\\images.jpg";
+		String str = "Origem.jpg";
 		try {
 			image = ImageIO.read(new File(str));
 		} catch (IOException ex) {
