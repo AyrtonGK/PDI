@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.math3.complex.Complex;
+import com.frank.math.Complex;
 
 public class Principal {
 	public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class Principal {
 
 		for (int i = 0; i < img.getHeight(); i++)
 			for (int j = 0; j < img.getWidth(); j++)
-				img.setRGB(j, i, (int) matriz[i][j].getReal());
+				img.setRGB(j, i, (int) matriz[i][j].real);
 
 		return img;
 	}

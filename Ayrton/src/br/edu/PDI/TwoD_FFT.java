@@ -1,6 +1,6 @@
 package br.edu.PDI;
 
-import org.apache.commons.math3.complex.Complex;
+import com.frank.math.Complex;
 import com.frank.math.trans.DoubleFFT_2D;
 
 public class TwoD_FFT {
@@ -19,8 +19,8 @@ public class TwoD_FFT {
 
 		for (int j = 0; j < nrows; j++)
 			for (int i = 0; i < ncols; i++) {
-				data[j * ncols * 2 + 2 * i] = input[j][i].getReal();
-				data[j * ncols * 2 + 2 * i + 1] = input[j][i].getImaginary();
+				data[j * ncols * 2 + 2 * i] = input[j][i].real;
+				data[j * ncols * 2 + 2 * i + 1] = input[j][i].imaginary;
 			}
 
 		new DoubleFFT_2D(nrows, ncols).complexForward(data);
@@ -42,8 +42,8 @@ public class TwoD_FFT {
 
 		for (int j = 0; j < nrows; j++)
 			for (int i = 0; i < ncols; i++) {
-				data[j * ncols * 2 + 2 * i] = input[j][i].getReal();
-				data[j * ncols * 2 + 2 * i + 1] = input[j][i].getImaginary();
+				data[j * ncols * 2 + 2 * i] = input[j][i].real;
+				data[j * ncols * 2 + 2 * i + 1] = input[j][i].imaginary;
 			}
 
 		new DoubleFFT_2D(nrows, ncols).complexInverse(data, scale);
