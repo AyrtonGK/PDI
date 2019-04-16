@@ -1,53 +1,57 @@
 package br.edu.PDI;
-//This is a sample program to perform 2D FFT inplace 
-import java.util.Scanner;
- 
-public class TwoD_FFT 
-{
-    static void twoDfft(double[][] inputData, double[][] realOut,
-            double[][] complexOut, double[][] amplitudeOut) 
-    {
-        int height = inputData.length;
-        int width = inputData[0].length;
- 
-        // Two outer loops iterate on output data.
-        for (int yWave = 0; yWave < height; yWave++) 
-        {
-            for (int xWave = 0; xWave < width; xWave++) 
-            {
-                // Two inner loops iterate on input data.
-                for (int ySpace = 0; ySpace < height; ySpace++) 
-                {
-                    for (int xSpace = 0; xSpace < width; xSpace++) 
-                    {
-                        // Compute real, imag, and ampltude.
-                        realOut[yWave][xWave] += (inputData[ySpace][xSpace] * Math.cos(2 * Math.PI * ((1.0 * xWave * xSpace / width) + (1.0 * yWave * ySpace / height)))) / Math.sqrt(width * height);
-                        complexOut[yWave][xWave] -= (inputData[ySpace][xSpace] * Math.sin(2 * Math.PI * ((1.0 * xWave * xSpace / width) + (1.0 * yWave * ySpace / height)))) / Math.sqrt(width * height);
-                        amplitudeOut[yWave][xWave] = Math.sqrt(realOut[yWave][xWave]* realOut[yWave][xWave] + complexOut[yWave][xWave] * complexOut[yWave][xWave]);
-                    }
-                    System.out.println(realOut[yWave][xWave] + " + "
-                            + complexOut[yWave][xWave] + " i");
-                }
-            }
-        }
-    }
- 
-    public static void main(String args[]) 
-    {
-        System.out.println("Enter the size: ");
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        double[][] input = new double[n][n];
-        double[][] real = new double[n][n];
-        double[][] img = new double[n][n];
-        double[][] amplitutude = new double[n][n];
-        System.out.println("Enter the 2D elements ");
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                input[i][j] = sc.nextDouble();
- 
-        twoDfft(input, real, img, amplitutude);
- 
-        sc.close();
-    }
+
+import org.apache.commons.math3.complex.Complex;
+import com.frank.math.trans.DoubleFFT_2D;
+
+public class TwoD_FFT {
+
+	/**
+	 * Perform the 2D Fast Fourier Transformation.
+	 * 
+	 * @param input the specified complex matrix, <code>x</code> must arranged as
+	 *              <code>x[rows][columns]</code>
+	 * @return the result of 2D Fast Fourier Transformation
+	 */
+	public static Complex[][] fft(Complex[][] input) {
+		int nrows = input.length;
+		int ncols = input[0].length;
+		double[] data = new double[nrows * ncols * 2];
+
+		for (int j = 0; j < nrows; j++)
+			for (int i = 0; i < ncols; i++) {
+				data[j * ncols * 2 + 2 * i] = input[j][i].getReal();
+				data[j * ncols * 2 + 2 * i + 1] = input[j][i].getImaginary();
+			}
+
+		new DoubleFFT_2D(nrows, ncols).complexForward(data);
+		Complex[][] y = new Complex[nrows][ncols];
+
+		for (int j = 0; j < nrows; j++)
+			for (int i = 0; i < ncols; i++) {
+				y[j][i] = new Complex(data[j * ncols * 2 + 2 * i], data[j * ncols * 2 + 2 * i + 1]);
+			}
+		return y;
+	}
+
+	public static Complex[][] ifft(Complex[][] input, boolean scale) {
+
+		final int nrows = input.length;
+		final int ncols = input[0].length;
+		final int n = nrows * ncols;
+		final double[] data = new double[n * 2];
+
+		for (int j = 0; j < nrows; j++)
+			for (int i = 0; i < ncols; i++) {
+				data[j * ncols * 2 + 2 * i] = input[j][i].getReal();
+				data[j * ncols * 2 + 2 * i + 1] = input[j][i].getImaginary();
+			}
+
+		new DoubleFFT_2D(nrows, ncols).complexInverse(data, scale);
+		Complex[][] x = new Complex[nrows][ncols];
+		for (int j = 0; j < nrows; j++)
+			for (int i = 0; i < ncols; i++)
+				x[j][i] = new Complex(data[j * ncols * 2 + 2 * i], data[j * ncols * 2 + 2 * i + 1]);
+
+		return x;
+	}
 }
