@@ -16,11 +16,14 @@ public class Principal {
 		Complex[][] transformada = TwoD_FFT.fft(matriz);
 
 		try {
-			ImageIO.write(comp2img(transformada), "jpg", new File("Transformada.PNG"));
+			ImageIO.write(Imagem.trans2img(transformada), "jpg", new File("Transformada.PNG"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		
+		/* Complex[][] tratada = TwoD_FFT.ifft(transformada, true);
+		 * try { ImageIO.write(comp2img(tratada), "jpg", new File("Tratada.PNG")); }
+		 * catch (IOException e) { }
+		 */
 	}
 
 	public static BufferedImage readFile(File arquivo) {
