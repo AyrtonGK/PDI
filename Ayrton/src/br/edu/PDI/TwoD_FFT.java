@@ -68,7 +68,7 @@ public class TwoD_FFT {
 
 		for (int i = 0; i < nrows; i++)
 			for (int j = 0; j < ncols; j++) {
-				multiplicador[i][j] = (new Color(filtro.getRGB(i, j)).getRed()) / 255D;
+				multiplicador[i][j] = ((double) new Color(filtro.getRGB(i, j)).getRed()) / 255D;
 				System.out.print(multiplicador[i][j]);
 			}
 
