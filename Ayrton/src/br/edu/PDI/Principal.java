@@ -11,19 +11,22 @@ import com.frank.math.Complex;
 public class Principal {
 	public static void main(String[] args) {
 
-		BufferedImage img = readFile(new File("Origem.PNG"));
-		Complex[][] matriz = img2comp(img);
+		BufferedImage img = readFile(new File("Origem.jpg"));
+		Complex[][] matriz = img2comp(Imagem.tonsCinza(img));
 		Complex[][] transformada = TwoD_FFT.fft(matriz);
 
 		try {
-			ImageIO.write(Imagem.trans2img(transformada), "jpg", new File("Transformada.PNG"));
+			ImageIO.write(Imagem.trans2img(transformada), "jpg", new File("Transformada.jpg"));
 		} catch (IOException e) {
 		}
-		
-		/* Complex[][] tratada = TwoD_FFT.ifft(transformada, true);
-		 * try { ImageIO.write(comp2img(tratada), "jpg", new File("Tratada.PNG")); }
-		 * catch (IOException e) { }
-		 */
+
+		transformada = TwoD_FFT.aplicaFiltro(transformada, readFile(new File("Filtro.jpg")));
+
+		Complex[][] tratada = TwoD_FFT.ifft(transformada, true);
+		try {
+			ImageIO.write(comp2img(tratada), "jpg", new File("Tratada.PNG"));
+		} catch (IOException e) {
+		}
 	}
 
 	public static BufferedImage readFile(File arquivo) {

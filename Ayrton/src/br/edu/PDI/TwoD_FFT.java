@@ -1,5 +1,8 @@
 package br.edu.PDI;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+
 import com.frank.math.Complex;
 import com.frank.math.trans.DoubleFFT_2D;
 
@@ -53,5 +56,31 @@ public class TwoD_FFT {
 				x[j][i] = new Complex(data[j * ncols * 2 + 2 * i], data[j * ncols * 2 + 2 * i + 1]);
 
 		return x;
+	}
+
+	public static Complex[][] aplicaFiltro(Complex[][] origem, BufferedImage filtro) {
+
+		final int nrows = filtro.getWidth();
+		final int ncols = filtro.getHeight();
+
+		double multiplicador[][] = new double[nrows][ncols];
+		Complex[][] filtrado = new Complex[nrows][ncols];
+
+		for (int i = 0; i < nrows; i++)
+			for (int j = 0; j < ncols; j++) {
+				multiplicador[i][j] = (new Color(filtro.getRGB(i, j)).getRed()) / 255D;
+				System.out.print(multiplicador[i][j]);
+			}
+
+		multiplicador = Imagem.fTranslacao(multiplicador, nrows / 2, ncols / 2);
+
+		for (int i = 0; i < multiplicador.length; i++)
+			for (int j = 0; j < multiplicador[0].length; j++) {
+				final double real = multiplicador[i][j] * origem[i][j].real;
+				final double imaginario = origem[i][j].imaginary;
+				filtrado[i][j] = new Complex(real, imaginario);
+			}
+
+		return filtrado;
 	}
 }
